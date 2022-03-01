@@ -16,6 +16,16 @@ module.exports = function (eleventyConfig, configGlobalOptions = {}) {
   }
   const pluginOptions = Object.assign({}, defaultOptions, configGlobalOptions);
 
+  const translateFn = typeof pluginOptions.translations === 'function' ? pluginOptions.translations : () => pluginOptions.translations;
+  
+  pluginOptions.translations = translateFn();
+
+  eleventyConfig.on('eleventy.beforeWatch', () => {
+    console.error('before watch test', JSON.stringify(pluginOptions.translations));
+    pluginOptions.translations = translateFn();
+    console.error('before watch test 2', JSON.stringify(pluginOptions.translations));
+  });
+
   eleventyConfig.addFilter('i18n', function (key, data, localeOverride) {
     // TBC Here we need to determine if filter is being used on page or in include, respectively
     const page = this.page || this.ctx.page;

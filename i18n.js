@@ -11,13 +11,11 @@ module.exports = function (
   pluginOptions = {},
   page
 ) {
-  const { translations = {}, fallbackLocales: fallbackLocales = {} } =
+  const { translations = {}, fallbackLocales: fallbackLocales = {}, contextLocale: contextLocale = page => get(page, 'url', '').split('/')[1] } =
     pluginOptions;
 
   // Use explicit `locale` argument if passed in, otherwise infer it from URL prefix segment
-  const url = get(page, 'url', '');
-  const contextLocale = url.split('/')[1];
-  const locale = localeOverride || contextLocale;
+  const locale = localeOverride || contextLocale(page, pluginOptions);
 
   // Preferred translation
   const translation = get(translations, `[${key}][${locale}]`);
