@@ -21,9 +21,8 @@ module.exports = function (eleventyConfig, configGlobalOptions = {}) {
   pluginOptions.translations = translateFn();
 
   eleventyConfig.on('eleventy.beforeWatch', () => {
-    console.error('before watch test', JSON.stringify(pluginOptions.translations));
+    // This is introducing an infinite loop. We need to figure out a speedy way to test if there are actualc hanges.
     pluginOptions.translations = translateFn();
-    console.error('before watch test 2', JSON.stringify(pluginOptions.translations));
   });
 
   eleventyConfig.addFilter('i18n', function (key, data, localeOverride) {
